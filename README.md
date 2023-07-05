@@ -10,11 +10,12 @@ KKBOX offers subscription based music streaming service. When users signs up for
 </p>
 <img src="https://img.shields.io/badge/ -223337.svg?style=for-the-badge" width="1500px" height="1px">
 <h3>2. Methods and Steps</h3>
+<h6 align="center">Fig 1-Workflow Diagram</h6>
 <img src="https://github.com/theidari/customer_churn/blob/main/assets/workflow.png">
 Here are the steps typically involved in customer churn prediction:
 
 <ol>
-<li>Dataset</li> Gather relevant data about customers, including demographic information, purchase history, usage patterns, customer interactions, and any other data points that might be indicative of churn.
+<b><li>2. Dataset</li></b> Gather relevant data about customers, including demographic information, purchase history, usage patterns, customer interactions, and any other data points that might be indicative of churn.
 <li>Data Profiling</li>
   Data Preprocessing: Cleanse and preprocess the collected data to remove any inconsistencies, missing values, or outliers. This step may involve data transformation, feature engineering, and scaling.
 Feature Selection: Identify the most relevant features that can potentially influence churn. This step helps reduce noise and improve the accuracy of the predictive models.
