@@ -13,25 +13,20 @@ KKBOX offers subscription based music streaming service. When users signs up for
 <img src="https://github.com/theidari/customer_churn/blob/main/assets/workflow.png">
 Here are the steps typically involved in customer churn prediction:
 
-
-Data Collection: Gather relevant data about customers, including demographic information, purchase history, usage patterns, customer interactions, and any other data points that might be indicative of churn.
-
-Data Preprocessing: Cleanse and preprocess the collected data to remove any inconsistencies, missing values, or outliers. This step may involve data transformation, feature engineering, and scaling.
-
+<ol>
+<li>Dataset</li> Gather relevant data about customers, including demographic information, purchase history, usage patterns, customer interactions, and any other data points that might be indicative of churn.
+<li>Data Profiling</li>
+  Data Preprocessing: Cleanse and preprocess the collected data to remove any inconsistencies, missing values, or outliers. This step may involve data transformation, feature engineering, and scaling.
 Feature Selection: Identify the most relevant features that can potentially influence churn. This step helps reduce noise and improve the accuracy of the predictive models.
-
+<li>Modeling</li>
 Model Selection: Choose an appropriate predictive modeling technique based on the nature of the data and the problem at hand. Commonly used techniques include logistic regression, decision trees, random forests, support vector machines (SVM), and artificial neural networks.
-
 Model Training: Split the dataset into training and testing sets. Use the training set to train the chosen model by fitting it to the historical data and adjusting the model's parameters to minimize the prediction error.
-
 Model Evaluation: Evaluate the trained model's performance using the testing set. Common evaluation metrics include accuracy, precision, recall, F1 score, and area under the receiver operating characteristic curve (AUC-ROC).
-
 Predictive Analysis: Apply the trained model to new, unseen data to predict the likelihood of churn for individual customers. This step helps identify customers who are at high risk of churn and require targeted retention efforts.
-
+<li>Monitoring</li>
 Customer Retention Strategies: Based on the churn predictions, design and implement personalized retention strategies for at-risk customers. These strategies might include special offers, discounts, personalized communication, loyalty programs, or improved customer service.
-
 Monitor and Iterate: Continuously monitor the performance of the churn prediction model and retention strategies. Collect feedback, measure the effectiveness of the implemented measures, and refine the predictive models and retention strategies over time.
-
+</ol>
 <img src="https://img.shields.io/badge/ -223337.svg?style=for-the-badge" width="1500px" height="1px">
 <h3>3. Dataset</h3>
 
