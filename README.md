@@ -10,6 +10,7 @@ KKBOX offers subscription based music streaming service. When users signs up for
 </p>
 <img src="https://img.shields.io/badge/ -223337.svg?style=for-the-badge" width="1500px" height="1px">
 <h3>2. Methods and Steps</h3>
+<img src="https://github.com/theidari/customer_churn/blob/main/assets/workflow.png">
 Here are the steps typically involved in customer churn prediction:
 
 
