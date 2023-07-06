@@ -3,6 +3,7 @@
 </p>
 <h3>1. Project Overview</h3>
 <p align="justify">
+Customer churn prediction and profiling are significant economic considerations for numerous companies.<sup>[1]</sup>
 Customer churn, also known as customer attrition, refers to the phenomenon where customers or subscribers end their relationship with a company or service provider. It occurs when customers discontinue using a company's products or services, switch to a competitor, or simply stop engaging with the business altogether.
 </p>
 <p align="justify">
@@ -32,7 +33,14 @@ Monitor and Iterate: Continuously monitor the performance of the churn predictio
 <h3>3. Dataset</h3>
 
 <img src="https://img.shields.io/badge/ -223337.svg?style=for-the-badge" width="1500px" height="1px">
-<h3>3. Dataset</h3>
+<h3>4. Results</h3>
 
 <img src="https://img.shields.io/badge/ -223337.svg?style=for-the-badge" width="1500px" height="1px">
-<h3>3. Dataset</h3>
+<h3>5. Conclusions</h3>
+
+<img src="https://img.shields.io/badge/ -223337.svg?style=for-the-badge" width="1500px" height="1px">
+<h3>6. Future Improvement and Discussion</h3>
+
+<img src="https://img.shields.io/badge/ -223337.svg?style=for-the-badge" width="1500px" height="1px">
+<h3>References</h3>
+
