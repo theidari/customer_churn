@@ -33,7 +33,8 @@ Monitor and Iterate: Continuously monitor the performance of the churn predictio
 </ol>
 <img src="https://img.shields.io/badge/ -223337.svg?style=for-the-badge" width="1500px" height="1px">
 <h3>3. Dataset</h3>
-
+<h5>Data Storage</h5>
+All of the data is stored and written to the GCS bucket.
 <img src="https://img.shields.io/badge/ -223337.svg?style=for-the-badge" width="1500px" height="1px">
 <h3>4. Results</h3>
 
