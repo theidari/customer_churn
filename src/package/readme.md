@@ -1,3 +1,4 @@
+<img src="https://raw.githubusercontent.com/theidari/customer_churn/main/assets/package.png" width=200>
 Directory Structure:<br>
 package/<br>
 <b>├── <b>__init__.py</b><br>
