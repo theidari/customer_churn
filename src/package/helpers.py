@@ -292,5 +292,32 @@ def save_model_data(df: DataFrame, gcs_bucket: str, file_name: str, credential_p
         print(f"An error occurred: {e}")
         # Optionally, restore original credentials environment variable in case of error
         os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = original_credential_path
+      
+# GBT Feature Importance _________________________________________________________________________________________________
+def extract_gbt_feature_importance(model_fitted: PipelineModel, features_fitted: List[str]) -> DataFrame:
+    """
+    Extracts feature importances from a fitted GBT model in a Spark ML pipeline.
 
+    Args:
+        model_fitted (PipelineModel): The fitted Spark ML pipeline containing the GBT model.
+        features_fitted (List[str]): A list of feature names used in the model.
+        
+    Returns:
+        DataFrame: A Spark DataFrame containing feature importances.
+    """
+    
+    # Get the GBT classification model from the pipeline stages
+    gbt_model = model_fitted.stages[-1]
+    
+    # Retrieve feature importances from the GBT model
+    feature_importance = gbt_model.featureImportances
+    
+    # Convert NumPy float64 values to Python float
+    feature_importance = [float(value) for value in feature_importance]
+    
+    # Create a DataFrame with the feature importance summary
+    data = [(feature_importance[idx], features_fitted[idx]) for idx in range(len(features_fitted))]
+    summary_data = spark.createDataFrame(data, ["GBTImportance", "Feature"])
+    
+    return summary_data
 # ------------------------------------------------------------------------------------------------------------------------
