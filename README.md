@@ -6,8 +6,7 @@
 Predicting customer churn is a vital economic focus for many companies<sup>[1]</sup>. Simply put, customer churn happens when people stop using a company's services, often turning to competitors. Acquiring a new customer can cost up to seven times more than keeping an existing one<sup>[2]</sup>. Therefore, for companies relying on regular subscription fees, like those in banking, telecom, or online services, it's essential to keep their customers. As such, identifying which customers might leave has become a priority in many industries.
 </p>
 <p align="justify">
-KKBOX offers subscription based music streaming service. When users signs up for our service, users can choose to either manual renew or auto-renew the service. Users can actively cancel their membership at any time.
-</p>
+For KKBOX, a subscription-based music streaming platform, maintaining user loyalty is essential. Given that users can opt for manual or auto-renewal upon sign-up and can cancel memberships anytime, this project aims to leverage four machine learning algorithms, supplemented by GCP Auto-ML methods, to accurately identify and predict potential customer churn for KKBOX.</p>
 <img src="https://img.shields.io/badge/ -223337.svg?style=for-the-badge" width="1500px" height="1px">
 <h3>2. Methods and Steps</h3>
 <h6 align="center">Fig 1-Workflow Diagram</h6>
