@@ -170,5 +170,106 @@ class TransactionMerger:
         """
         info_display = DataFrameInfoDisplay(new_tran_df)
         info_display.display_info(show_schema, show_data, num_rows)
+        
+# A class A class for merging member data and transaction ________________________________________________________________
+class ModelSelector:
+    """Class for selecting the best model from a set of classifiers."""
+    
+    def __init__(self, train_df, test_df, assembler, indexer):
+        """Initialize the ModelSelector with training and testing data, feature assembler, and label indexer."""
+        
+        # DataFrames for training and testing
+        self.train_df = train_df
+        self.test_df = test_df
+        
+        # Assembler and indexer for feature transformation
+        self.assembler = assembler
+        self.indexer = indexer
+        
+        # Define the models and their parameter grids for hyperparameter tuning
+        self.models_and_params = {
+            'Decision Tree': (
+                DecisionTreeClassifier(),
+                ParamGridBuilder().addGrid(DecisionTreeClassifier.maxDepth, [2, 5, 10, 20])
+                                  .addGrid(DecisionTreeClassifier.maxBins, [20, 40, 80]).build()
+            ),
+            'Random Forest': (
+                RandomForestClassifier(), 
+                ParamGridBuilder().addGrid(RandomForestClassifier.numTrees, [10, 20])
+                                  .addGrid(RandomForestClassifier.maxDepth, [2, 5, 10]).build()
+            ),
+            'Gradient-Boosted Tree': (
+                GBTClassifier(), 
+                ParamGridBuilder().addGrid(GBTClassifier.maxIter, [10, 20])
+                                  .addGrid(GBTClassifier.maxDepth, [2, 5, 10]).build()
+            ),
+            'Linear Support Vector Machine': (
+                LinearSVC(), 
+                ParamGridBuilder().addGrid(LinearSVC.regParam, [0.1, 0.01])
+                                  .addGrid(LinearSVC.maxIter, [100, 200]).build()
+            )
+        }
+        
+        # Initialize variables to store the best model and its metrics
+        self.best_model = None
+        self.best_model_name = None
+        self.best_model_params = None
+        self.best_f1_score = 0
+        
+        # Initialize DataFrame to store evaluation results
+        self.columns = ['Model', 'Accuracy', 'Precision', 'Recall', 'F1 Score', 'AUC']
+        self.schema = StructType([StructField(name, FloatType(), True) for name in self.columns])
+        self.results = spark.createDataFrame([], self.schema)
 
+    def fit(self):
+        """Fit the models and select the best one based on F1 score."""
+        
+        # Loop through each model and its parameter grid
+        for model_name, (model, paramGrid) in self.models_and_params.items():
+            
+            # Create a pipeline with feature transformation and model
+            pipeline = Pipeline(stages=[self.assembler, self.indexer, model])
+            
+            # Perform cross-validation
+            crossval = CrossValidator(estimator=pipeline,
+                                      estimatorParamMaps=paramGrid,
+                                      evaluator=MulticlassClassificationEvaluator(metricName="f1"),
+                                      numFolds=5) 
+
+            # Fit the model
+            cvModel = crossval.fit(self.train_df)
+            
+            # Make predictions on the test set
+            prediction = cvModel.transform(self.test_df)
+
+            # Get evaluation metrics
+            accuracy = MulticlassClassificationEvaluator(metricName="accuracy").evaluate(prediction)
+            precision = MulticlassClassificationEvaluator(metricName="weightedPrecision").evaluate(prediction)
+            recall = MulticlassClassificationEvaluator(metricName="weightedRecall").evaluate(prediction)
+            f1_score = MulticlassClassificationEvaluator(metricName="f1").evaluate(prediction)
+            auc = BinaryClassificationEvaluator(metricName="areaUnderROC").evaluate(prediction)
+
+            # Store the results
+            result_row = (model_name, accuracy, precision, recall, f1_score, auc)
+            self.results = self.results.union(spark.createDataFrame([result_row], ['Model', 'Accuracy', 'Precision', 'Recall', 'F1 Score', 'AUC']))
+
+            # Update the best model if the current model has a higher F1 score
+            if f1_score > self.best_f1_score:
+                self.best_f1_score = f1_score
+                self.best_model = cvModel.bestModel
+                self.best_model_name = model_name
+                self.best_model_params = cvModel.bestModel.extractParamMap()
+
+    def display_results(self):
+        """Display the evaluation results and details of the best model."""
+        
+        print(f"Best model: {self.best_model_name} with F1 score: {self.best_f1_score}")
+        
+        # Display the parameters of the best model
+        for param, value in self.best_model_params.items():
+            print(f"Parameter: {param.name}, Value: {value}")
+
+        # Show the evaluation results
+        self.results.show()
+        
 # ------------------------------------------------------------------------------------------------------------------------
