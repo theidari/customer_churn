@@ -3,10 +3,7 @@
 </p>
 <h3>1. Project Overview</h3>
 <p align="justify">
-Customer churn prediction and profiling are significant economic considerations for numerous companies.<sup>[1]</sup>
-Customer churn, also known as customer attrition, refers to the phenomenon where customers or subscribers end their relationship with a company or service provider. It occurs when customers discontinue using a company's products or services, switch to a competitor, or simply stop engaging with the business altogether.
-It has become evident that the expenses associated with acquiring a new customer can be significantly higher than (five to seven times) the costs of retaining an existing one[2] As a result, preventing customer churn or attrition has become crucial for subscription-based service companies that depend on steady and recurring membership fees.
- ((( This holds true in various sectors such as insurance [6], banking [7], online gambling [8], online video games [9], music streaming [10], online services [11], and telecommunications [12-15]. Consequently, accurately predicting which customers are likely to churn has become a top priority across multiple industries.)))
+Predicting customer churn is a vital economic focus for many companies<sup>[1]</sup>. Simply put, customer churn happens when people stop using a company's services, often turning to competitors. Acquiring a new customer can cost up to seven times more than keeping an existing one<sup>[2]</sup>. Therefore, for companies relying on regular subscription fees, like those in banking, telecom, or online services, it's essential to keep their customers. As such, identifying which customers might leave has become a priority in many industries.
 </p>
 <p align="justify">
 KKBOX offers subscription based music streaming service. When users signs up for our service, users can choose to either manual renew or auto-renew the service. Users can actively cancel their membership at any time.
