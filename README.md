@@ -29,12 +29,10 @@ Customer Retention Strategies: Based on the churn predictions, design and implem
 Monitor and Iterate: Continuously monitor the performance of the churn prediction model and retention strategies. Collect feedback, measure the effectiveness of the implemented measures, and refine the predictive models and retention strategies over time.
 </ol>
 <img src="https://img.shields.io/badge/ -223337.svg?style=for-the-badge" width="1500px" height="1px">
-<h3>3. Dataset</h3>
-<h5>Data Storage</h5>
-All of the data is stored and written to the GCS bucket.
-<img src="https://img.shields.io/badge/ -223337.svg?style=for-the-badge" width="1500px" height="1px">
 <h3>4. Results</h3>
-
+<ul><li><b>member model df</b>
+<p align="justify">Analyzing the model outcomes, the Decision Tree achieves a decent accuracy of 92.73%, but its AUC of 35.54% reveals a limitation in distinguishing between classes. Random Forest's accuracy is close at 92.68%, but its higher AUC of 82.06% shows better class differentiation. The Gradient-Boosted Trees model leads with a 92.89% accuracy and an AUC of 85.11%. In contrast, the Linear SVM has an accuracy of 92.19% with a moderate AUC of 50%. Overall, Gradient-Boosted Trees is the standout performer, especially in AUC, followed closely by Random Forest. Both significantly surpass the Decision Tree and Linear SVM in class differentiation capabilities. Validating these findings, Gradient-Boosted Trees maintain their strong performance in the test set, notably with an AUC of 85.11%, emphasizing its effectiveness in class separation.</p></li> 
+<li align="justify"></li></ul>
 <img src="https://img.shields.io/badge/ -223337.svg?style=for-the-badge" width="1500px" height="1px">
 <h3>5. Conclusions</h3>
 
