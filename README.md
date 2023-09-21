@@ -19,7 +19,7 @@ For KKBOX, a subscription-based music streaming platform, maintaining user loyal
 <b><li>Data Profiling</li></b>
   Data Preprocessing: Cleanse and preprocess the collected data to remove any inconsistencies, missing values, or outliers. This step may involve data transformation, feature engineering, and scaling.
 Feature Selection: Identify the most relevant features that can potentially influence churn. This step helps reduce noise and improve the accuracy of the predictive models.
-<b><li>Modeling</li></b>
+<b><li>Feature Engineering and Modeling</li></b>
 Model Selection: Choose an appropriate predictive modeling technique based on the nature of the data and the problem at hand. Commonly used techniques include logistic regression, decision trees, random forests, support vector machines (SVM), and artificial neural networks.
 Model Training: Split the dataset into training and testing sets. Use the training set to train the chosen model by fitting it to the historical data and adjusting the model's parameters to minimize the prediction error.
 Model Evaluation: Evaluate the trained model's performance using the testing set. Common evaluation metrics include accuracy, precision, recall, F1 score, and area under the receiver operating characteristic curve (AUC-ROC).
