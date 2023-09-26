@@ -3,9 +3,7 @@
 # ------------------------------------------------------------------------------------------------------------------------
 from package.config import *
 from package.func import avg_cal_pandas
-"""
 
-"""
 class PltAssets:
     def __init__(self, plt_dataframe):
         """
@@ -37,22 +35,26 @@ class PltAssets:
         Generate a color scale for Plotly based on the number of provided value counts.
 
         Args:
-            value_counts (list-like): Iterable containing values whose count determines the color scale length.
+            value_counts (list-like or int): Iterable containing values whose count determines the color scale length or an integer.
             COLORSET (list of lists): A list of two RGB colors to interpolate between. Defaults to red and blue.
 
         Returns:
             list: A list of colors in Plotly's 'rgb(r, g, b)' format.
         """
         # Define a color scale between two colors
-        color_scale = np.linspace(COLORSET[0], COLORSET[1], len(value_counts)).tolist()
+        if isinstance(value_counts, pd.DataFrame):
+            num_colors = len(value_counts)
+        elif isinstance(value_counts, int):
+            num_colors = int(value_counts)
+        else:
+            raise TypeError("value_counts must be either a DataFrame or an integer.")
+
+        color_scale = np.linspace(COLORSET[0], COLORSET[1], num_colors).tolist()
 
         # Convert RGB values to Plotly color format
         plotly_colors = ["rgb({}, {}, {})".format(*tuple(color)) for color in color_scale]
 
         return plotly_colors
-
-
-
 
 # Bar Chart ______________________________________________________________________________________________________________
 def bar_chart(dfs, param):
@@ -98,7 +100,7 @@ def bar_chart(dfs, param):
         
     # Define layout and subplot titles
     subplot_titles = [
-        f"<span style='font-size: 20px; color:black;'>{title.replace('_', ' ').title()}</span>" for title in chart_title_data
+        f"<span style='font-size: 15px; color:black;'>{title.replace('_', ' ').title()}</span>" for title in chart_title_data
     ]
 
     layout = go.Layout(
@@ -125,10 +127,11 @@ def bar_chart(dfs, param):
     return fig.show()
     
 # bar_scatter_chart _________________________________________________________________________________________________________________
-def bar_scatter_chart(df, param, MARKER_SIZE=1.3):
+def bar_scatter_chart(df, param, chart_title=None, MARKER_SIZE=1.3):
     
     df_name = PltAssets(df).get_variable_name()
-    chart_title = df_name if df_name else "Not Defined"
+    if chart_title is None:
+        chart_title = df_name if df_name else "Not Defined"
     
     churn_df = (df.groupBy(param)
                            .agg(
@@ -169,6 +172,7 @@ def bar_scatter_chart(df, param, MARKER_SIZE=1.3):
         x=pandas_df[param],
         y=pandas_df["churn_percentage"],
         mode='markers',
+        hovertemplate=param.upper() + ": <b>%{x}</b><br>" + "CHURN PERCENTAGE: <b>%{y}</b>" + "<extra></extra>",
         marker_color=marker_colors,
         marker_size=marker_sizes,
         name='Data'
@@ -177,6 +181,7 @@ def bar_scatter_chart(df, param, MARKER_SIZE=1.3):
     average_trace = go.Scatter(
         x=[pandas_df[param].iloc[0], pandas_df[param].iloc[-1]],
         y=[average_value, average_value],
+        hovertemplate="Average:  <b>%{y}</b>" + "<extra></extra>",
         mode='lines',
         line=dict(color='red', dash='solid'),
         name='Average'
@@ -252,7 +257,9 @@ def sub_line(df, param=[], dates=[]):
         average_value, lower_bound, upper_bound = avg_cal_pandas(pandas_df, "churn_percentage")
                 
         # Create the line trace
-        line_trace = go.Scatter(x=pandas_df[param[1]], y=pandas_df["churn_percentage"], mode='lines+markers', marker_color='black', name='Data')
+        line_trace = go.Scatter(x=pandas_df[param[1]], y=pandas_df["churn_percentage"], mode='lines+markers',
+                                hovertemplate=param[1].upper() + ": <b>%{x}</b><br>" + "CHURN PERCENTAGE: <b>%{y}</b>" + "<extra></extra>",
+                                marker_color='black', name='Data')
 
         # Create the average line trace
         average_trace = go.Scatter(x=[pandas_df[param[1]].iloc[0], pandas_df[param[1]].iloc[-1]], y=[average_value, average_value],
@@ -292,46 +299,74 @@ def sub_line(df, param=[], dates=[]):
         # Show the figure
     fig.show()
     
-# ------------------------------------------------------------------------------------------------------------------------
-# Staxked Bar Chart ______________________________________________________________________________________________________
-def stacked_bar_chart(df, col):
-    # Convert the selected column of the DataFrame to a Pandas DataFrame
-    pandas_df = df.select("is_churn", col).toPandas()
+# MultiBar Chart _________________________________________________________________________________________________________
+def multiline(model_df, params=[], chart_title=""):
+    """
+    Plots a grouped bar chart for a given PySpark DataFrame based on specified parameters.
+    
+    Parameters:
+    - model_df : PySpark DataFrame
+        The dataframe to be plotted.
+    - params : list
+        A list of column names to be used for grouping and plotting.
+    - chart_title : str
+        The title of the chart.
+    """
+    chart_title_df = PltAssets(model_df).get_variable_name()
+    
+    # Groupby and count using PySpark's DataFrame
+    df = (model_df.groupby(params)
+          .agg(count('*').alias('counts'))
+          .toPandas())  # Convert to Pandas DataFrame for easier handling thereafter
+    
+    # Calculate total count
+    total_count = df['counts'].sum()
+    
+    # Create a grouped bar chart
+    fig = go.Figure()
+    # Define a color scale and convert RGB values to Plotly color format
+    color_code=int(2**(len(params))/2)
+    plotly_colors = PltAssets(df).generate_plotly_color_scale(color_code, COLORSET=[[255, 0, 0], [0, 0, 255]])
+    
+    combination_colors = {}
+    counter = 0
+    for auto_renew in [0, 1]:
+        for churn in [0, 1]:
+            combination_colors[(auto_renew, churn)] = plotly_colors[counter]
+            counter += 1
+            subset = df[(df[params[1]] == auto_renew) & (df[params[2]] == churn)].copy()
+            
+            # Calculate percentage for the subset
+            subset['percentage'] = (subset['counts'] / total_count) * 100
+            
+            fig.add_trace(go.Bar(
+                x=['No' if x == 0 else 'Yes' for x in subset[params[0]]],
+                y=subset['counts'],
+                marker=dict(color=combination_colors[(auto_renew, churn)]),
+                hovertemplate=(
+                    f"{params[0].replace('_', ' ').title()}: <b>%{{x}}</b><br>"
+                    f"{params[1].replace('_', ' ').title()}: <b>{'No' if auto_renew == 0 else 'Yes'}</b><br>"
+                    f"{params[2].replace('_', ' ').title()}: <b>{'No' if churn == 0 else 'Yes'}</b><br>"
+                    "Frequency: <b>%{y}</b><br>"
+                    "Percentage: <b>%{customdata[0]:.2f}%</b><extra></extra>"
+                ),
+                customdata=subset[['percentage']].values,
+                showlegend=False
+            ))
 
-    # Calculate the frequency of each unique value in the specified column for each "is_churn" category
-    value_counts = pandas_df.groupby(['is_churn', col]).size().reset_index()
-    value_counts.columns = ['is_churn', col, 'FREQUENCY']
-
-    # Create a list to store the traces for each "is_churn" category
-    data = []
-
-    # Get the unique values of the "is_churn" column
-    churn_values = pandas_df['is_churn'].unique()
-
-    # Create a stacked bar chart trace for each "is_churn" category
-    for churn_value in churn_values:
-        data.append(go.Bar(
-            x=value_counts[value_counts['is_churn'] == churn_value][col],
-            y=value_counts[value_counts['is_churn'] == churn_value]['FREQUENCY'],
-            name='Churn' if churn_value else 'Not Churn',
-            hovertemplate=col.upper() + ': <b>%{x}</b><br>' + 'FREQUENCY: <b>%{y}</b><br>Churn: <b>%{customdata}</b><extra></extra>',
-            customdata=['Yes' if churn_value else 'No'] * len(value_counts[col]),
-            opacity=0.8
-        ))
-
-    # Create the Figure object with the stacked bar chart traces
-    fig = go.Figure(data)
-
-    # Customize the layout of the plot
     fig.update_layout(
-        xaxis_title=col.upper(),
-        yaxis_title='FREQUENCY',
-        width=800,
-        height=600,
-        barmode='stack',
-        plot_bgcolor="#ffffff",
+        width=1200,
+        height=800,
+        barmode='group',
+        title=dict(text=chart_title.title()+" In "+chart_title_df.replace('_', ' ').title(),
+                   font=dict(color='black'),
+                   x=0.5,
+                   y=0.9),
+        xaxis=dict(title=params[0].replace('_', ' ').upper()+" STATUS", color='black', showline=True, linewidth=1, linecolor='black', mirror=True),
+        yaxis=dict(title="FREQUENCY", color='black', showline=True, linewidth=1, linecolor='black', mirror=True),
+        plot_bgcolor='#ffffff',
         paper_bgcolor="#ffffff"
     )
 
-    # Display the stacked bar chart
     fig.show()
+# ------------------------------------------------------------------------------------------------------------------------
