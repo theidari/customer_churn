@@ -36,13 +36,13 @@ Functions ----------------------------------------------------------------------
   GCP. Each function has been crafted with error-handling capabilities, providing a robust user experience.
 |- calculate_predictions_and_accuracy:
   |- Purpose: Calculate predictions on test data using a model and calculate accuracy.
-  |- Features: 
+  |- Features: Tuple containing the DataFrame with predictions and the calculated accuracy
 |- data_spliter:
   |- Purpose: Splits the given DataFrame into train and test datasets based on the provided ratio.
-  |- Features:
+  |- Features: Tuple containing the train and test DataFrames.
 |- extract_gbt_feature_importance:
   |- Purpose: Extracts feature importances from a fitted GBT model in a Spark ML pipeline and plots them.
-  |- Features: 
+  |- Features: A Spark DataFrame containing feature importances and the plotted graph.
 --------------------------------------------------------------------------------------------------------------------------
 """
 
