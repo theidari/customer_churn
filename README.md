@@ -16,7 +16,7 @@ For KKBOX, a subscription-based music streaming platform, maintaining user loyal
 <ol>
 <b><li><a href="https://github.com/theidari/customer_churn/tree/main/data">Dataset and Data Preprocessing</a></li></b>
 <p align="justify">The notebook gathers essential customer details like age, purchase history, usage frequency, and feedback. Then, using data preprocessing, it cleans the data by fixing errors, filling in gaps, and removing unusual data points.</p>
-<b><li>Data Profiling</li></b>
+<b><li><a href="https://theidari.github.io/customer_churn/results/data_profiling">Data Profiling</a></li></b>
   Data Preprocessing: Cleanse and preprocess the collected data to remove any inconsistencies, missing values, or outliers. This step may involve data transformation, feature engineering, and scaling.
 Feature Selection: Identify the most relevant features that can potentially influence churn. This step helps reduce noise and improve the accuracy of the predictive models.
 <b><li>Feature Engineering and Modeling</li></b>
